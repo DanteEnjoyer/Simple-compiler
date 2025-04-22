@@ -2372,7 +2372,7 @@ string determine_offset(int ind,string command )
 	}
 	else
 	{
-		if(symtable[ind].offset >0)
+		if(symtable[ind].offset > 0)
 		{
 			if(symtable[ind].type == REFERENCE)
 			{

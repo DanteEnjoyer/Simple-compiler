@@ -1013,13 +1013,12 @@ YY_RULE_SETUP
 						if(p == -1)
 							p = addtotable(string(yytext));
 						yylval = p;
-						//cout << yytext<<"takie zmienne  "<<"context "<<context<<" p"<<p<<symtable[p].type<<endl;
 						return ID;
 					}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 102 "lexer.l"
+#line 101 "lexer.l"
 {
 			yylval = '=';
 			return ASSIGNOP;
@@ -1027,15 +1026,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 107 "lexer.l"
+#line 106 "lexer.l"
 {return yytext[0];}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 108 "lexer.l"
+#line 107 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1039 "lexer.cpp"
+#line 1038 "lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2040,7 +2039,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 108 "lexer.l"
+#line 107 "lexer.l"
 
 int yywrap(void)
 {

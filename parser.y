@@ -16,9 +16,10 @@
 	int context = 1;
 	int localcontext = 1;
 	int negoffset = 0;
+	int arrtype = -REA-INT
 	bool addressReference = false;
-	int functionaloffset = 8; // 12 dla funkcji
-	string determine_offset(int ind,string command );
+	int functionaloffset = 8; // 12 dla funkcji 8 procedur
+	string determine_offset(int ind,string command);
 	void printAndClearFunctionBody();
 	vector<int> help;
 	vector<int> help_exp;	
@@ -79,8 +80,6 @@ declaration_list:
 
 declaration:
     identifier_list ':' type ';' {
-									if(context ==1)
-									{
 										vector<int>::iterator ids;
 										ValueType v;
 										if($3 <= REA || $3<= INT)
@@ -93,56 +92,37 @@ declaration:
 												v = REA;
 											for(ids = help.begin(); ids != help.end(); ids++)
 											{
-												modifyidentifier(*ids, v);
+												if(context != 1)
+												{
+													if(v == REA)
+														negoffset -= 8;
+													else 
+														negoffset -= 4;
+													modifyidentifier(*ids, v,negoffset,localcontext);
+												}
+												else
+													modifyidentifier(*ids, v);
 											}
 										}
 										else
 										{
-											$3 = $3-REA-INT;
+											$3 = $3+arrtype;
 											v = symtable[$3].vtype;
 											for(ids = help.begin(); ids != help.end(); ids++)
 											{
-												modifyarray(*ids, v,symtable[$3].arr.size,$3);
+												if(context != 1)
+												{
+													if(v == REA)
+														negoffset -= 8*symtable[$3].arr.size;
+													else 
+														negoffset -= 4*symtable[$3].arr.size;
+													modifyarray(*ids, v,symtable[$3].arr.size,$3,negoffset,localcontext);
+												}
+												else
+													modifyarray(*ids, v,symtable[$3].arr.size,$3);
 											}
 										}
-										help.clear();
-									}
-									else
-									{
-										vector<int>::iterator ids;
-										ValueType v;
-										if($3 <= REA || $3<= INT)
-										{
-											if($3 == INT)
-											{
-												v = INT;
-											}
-											else 
-												v = REA;
-											for(ids = help.begin(); ids != help.end(); ids++)
-											{
-												if(v == REA)
-													negoffset -= 8;
-												else 
-													negoffset -= 4;
-												modifyidentifier(*ids, v,negoffset,localcontext);
-											}
-										}
-										else
-										{
-											$3 = $3-REA-INT;
-											v = symtable[$3].vtype;
-											for(ids = help.begin(); ids != help.end(); ids++)
-											{
-												if(v == REA)
-													negoffset -= 8*symtable[$3].arr.size;
-												else 
-													negoffset -= 4*symtable[$3].arr.size;
-												modifyarray(*ids, v,symtable[$3].arr.size,$3,negoffset,localcontext);
-											}
-										}
-										help.clear();									
-									}
+										help.clear();							
 								 }
     ;
 type:
@@ -269,7 +249,7 @@ parameter_list:
 										else
 										{
 											
-											$3 = $3-REA-INT;
+											$3 = $3+arrtype;
 											v = symtable[$3].vtype;
 											for(ids = help.end() - 1; ids >= help.begin();ids--)
 											{
@@ -300,7 +280,7 @@ parameter_list:
 										else
 										{
 											
-											$5 = $5-REA-INT;
+											$5 = $5+arrtype;
 											v = symtable[$5].vtype;
 											for(ids = help.end() - 1; ids >= help.begin();ids--)
 											{
@@ -655,7 +635,7 @@ factor:
 						{
 							int temp = add_temptotable(INT);
 							emit(string("realtoint.r"), $2, -1, temp, 2);
-							$2 = temp;8
+							$2 = temp;
 						}
 						int jump_label = addlabel();
 						int false_number = addtotable("0", INT);
