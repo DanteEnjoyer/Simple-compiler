@@ -190,7 +190,6 @@ subprogram_head:
 						vector<int>::iterator ids;
 						for(ids = args.end()-1; ids >= args.begin(); ids--)
 							{
-								//cout << symtable[*ids].name<<endl;
 								symtable[$1].function_args.push_back(*ids);
 								modifyreference(*ids,functionaloffset);
 								functionaloffset +=4;
@@ -568,10 +567,6 @@ factor:
 					int incsp = 0;
 					vector<int>::iterator ids;
 					vector<int>::iterator ass;
-					for(ass = help_exp.begin(); ass != help_exp.end(); ass++)
-					{
-						//cout << symtable[*ass].name <<"przed"<<endl;
-					}
 					int num_args = symtable[$1].function_args.size();
 					ass = help_exp.end() - num_args;
 					for(ids = symtable[$1].function_args.end() - 1; 
@@ -609,10 +604,6 @@ factor:
 						emit("push.i", -1, -1, position, 1);
 					}
 					help_exp.erase(help_exp.end() - num_args, help_exp.end());
-					for(ass = help_exp.begin(); ass != help_exp.end(); ass++)
-					{
-						//cout << symtable[*ass].name <<" po "<<endl;
-					}
 					int result = add_temptotable(symtable[$1].vtype);
 					emit("push.i", -1, -1, result, 1);
 					incsp += 4;
@@ -666,8 +657,7 @@ void gencode(char op, int arg1, int arg2, string tname)
 		case 'a':
 			emit(string("and")+determine_type(arg1),arg1 , arg2 , lookup(tname) ,3); 
 			break;			
-		case '+':
-			//cout << newtemp.name;
+		case '+':s
 			emit(string("add")+determine_type(arg1),arg1 , arg2 , lookup(tname) ,3); 
 			break;
 		case '-':
